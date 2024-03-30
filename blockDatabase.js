@@ -1,7 +1,7 @@
-const sqlite3 = require('sqlite3');
+import sqlite3 from 'sqlite3';
 
 // Create a function to initialize the database
-class blockDomainsDatabase {
+export class BlockDomainsDatabase {
     constructor() {
         let db = new sqlite3.Database('blockDomains.db', (err) => {
             if (err) {

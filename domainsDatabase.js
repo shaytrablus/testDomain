@@ -1,8 +1,7 @@
-const sqlite3 = require('sqlite3').verbose();
-const fs = require('fs');
-const jellyfish = require('jellyfish');
+import sqlite3 from 'sqlite3';
+import fs from 'fs';
 
-class DomainsDatabase {
+export class DomainsDatabase {
     constructor() {
         let db = new sqlite3.Database('domains.db', (err) => {
             if (err) {
@@ -16,7 +15,9 @@ class DomainsDatabase {
                         console.error('Error creating table:', err.message);
                     } else {
                         console.log('Table created successfully.');
-                        this.initializeDomains(db);
+                        if (!fs.existsSync('domains.db')){
+                            this.initializeDomains(db);
+                        }
                     }
                 });
             }

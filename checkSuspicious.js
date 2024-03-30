@@ -1,19 +1,17 @@
-const sqlite3 = require('sqlite3').verbose();
-const jellyfish = require('jellyfish');
-const { message } = require('./message');
-const { isDomainValid } = require('./virusTotal');
+import sqlite3 from 'sqlite3';
+import {isDomainValid} from './virusTotal.js';
 
 function isSuspicious(domain1, domain2) {
     if (domain1 === domain2) {
         return false;
     }
-    if (jellyfish.levenshtein_distance(domain1, domain2) < 3) {
+    if (levenshteinDistance(domain1, domain2) < 3) {
         return true;
     }
     return false;
 }
 
-function findSuspicious(newDomain) {
+export function findSuspicious(newDomain) {
     let db = new sqlite3.Database('domains.db', (err) => {
         if (err) {
             console.error(err.message);
@@ -28,13 +26,35 @@ function findSuspicious(newDomain) {
                 const domainName = row.domainName;
                 if (isSuspicious(domainName, newDomain)) {
                     db.close();
-                    return message();
+                    console.log("suspicious");
+                    return;
                 }
             }
             db.close();
-            if (!isDomainValid(newDomain)) {
-                return message();
+            if (isDomainValid(newDomain)==false) {
+                console.log("suspicious2")
+                return;
             }
         });
     });
 }
+
+const levenshteinDistance = (s, t) => {
+    if (!s.length) return t.length;
+    if (!t.length) return s.length;
+    const arr = [];
+    for (let i = 0; i <= t.length; i++) {
+      arr[i] = [i];
+      for (let j = 1; j <= s.length; j++) {
+        arr[i][j] =
+          i === 0
+            ? j
+            : Math.min(
+                arr[i - 1][j] + 1,
+                arr[i][j - 1] + 1,
+                arr[i - 1][j - 1] + (s[j - 1] === t[i - 1] ? 0 : 1)
+              );
+      }
+    }
+    return arr[t.length][s.length];
+  };

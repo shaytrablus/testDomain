@@ -1,7 +1,7 @@
 {
   "name": "domaintest",
   "version": "1.0.0",
-  "main": "blockDatabase.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,11 +13,13 @@
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "fs": "^0.0.1-security",
     "googleapis": "^105.0.0",
     "http-server": "^14.1.1",
     "jellyfish": "^0.0.11",
     "nodemailer": "^6.9.13",
     "sqlite3": "^5.1.7"
   },
-  "description": ""
+  "description": "",
+  "type": "module"
 }

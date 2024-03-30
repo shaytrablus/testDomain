@@ -54,9 +54,3 @@ function deleteEmails(gmail, domain) {
         }
     });
 }
-
-if (require.main === module) {
-    const domainsDb = new domainsDatabase();
-    const blockDb = new blockDatabase();
-    
-}

@@ -1,9 +1,7 @@
-require('./email.js')
-require('./app.js')
-require('./domainsDatabase.js')
-require('./blockDomainsDatabase.js')
+import {DomainsDatabase} from './domainsDatabase.js';
+import {BlockDomainsDatabase} from './blockDatabase.js';
+import {findSuspicious} from './checkSuspicious.js';
 
-const app = new app();
-//const domainsDatabase= new domainsDatabase();
-//const blockDomainsDatabase= new blockDomainsDatabase();
-//checkMessages()
+const domainsDatabase1= new DomainsDatabase();
+const blockDomainsDatabase1 = new BlockDomainsDatabase();
+findSuspicious('facebook.com');
