@@ -9,7 +9,7 @@
 		"liveServer.settings.multiRootWorkspaceName": "testDomain",
 		"liveServer.settings.host": "localhost",
 		"liveshare.allowGuestDebugControl": true,
-		"liveServer.settings.root": "/",
+		"liveServer.settings.root": "/src",
 		"liveServer.settings.file": "checkEmail.html",
 		"livePreview.portNumber": 8000,
 		// "livePreview.hostIP": "localhost",
