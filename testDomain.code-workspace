@@ -1,0 +1,42 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.port": 8000,
+		"liveServer.settings.multiRootWorkspaceName": "testDomain",
+		"liveServer.settings.host": "localhost",
+		"liveshare.allowGuestDebugControl": true,
+		"liveServer.settings.root": "/",
+		"liveServer.settings.file": "checkEmail.html",
+		"livePreview.portNumber": 8000,
+		// "livePreview.hostIP": "localhost",
+		// "livePreview.httpHeaders": {
+		// 	"Accept-Ranges": "bytes",
+		// 	"Content-Type": "text/html",
+		// 	"X-Frame-Options": "SAMEORIGIN",
+		// 	"X-XSS-Protection": "1; mode=block",
+		// 	"X-Content-Type-Options": "nosniff",
+		// },
+	},
+	"launch": {
+		"configurations": [
+			{
+				"type": "chrome",
+				"name": "http://localhost:8000/checkEmail.html",
+				"request": "launch",
+				"url": "http://localhost:8000/checkEmail.html"
+			},
+			{
+				"name": "Attach to url with files served from",
+				"type": "chrome",
+				"request": "attach",
+				"port": 9222,
+				"url": "http://localhost:8000/checkEmail.html",
+				"webRoot": "${workspaceFolder}/"
+			}
+		]
+	}
+}
