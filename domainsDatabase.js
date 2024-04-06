@@ -3,6 +3,38 @@ import fs from 'fs';
 
 export class DomainsDatabase {
     constructor() {
+      /*  // Define your data structure
+        const data = {
+            table1: [
+                { id: 1, name: 'gmail.com' },
+                { id: 2, name: 'google.com' },
+                { id: 3, name: 'facebook.com' },
+                { id: 4, name: 'outlook.com' },
+                { id: 5, name: 'linkedin.com' },
+                { id: 6, name: 'twitter.com' },
+                { id: 7, name: 'amazon.com' },
+                { id: 8, name: 'whatsapp.com' },
+                { id: 9, name: 'tiktok.com' },
+                { id: 10, name: 'apple.com' },
+                { id: 11, name: 'microsoft.com' },
+                { id: 12, name: 'youtube.com' }
+            ],
+            table2: []
+        };
+  
+  // Store the data in Chrome Storage
+  chrome.storage.local.set({ myData: data }, function() {
+    console.log('Data stored successfully');
+  });
+  
+  // Retrieve the data from Chrome Storage
+  chrome.storage.local.get('myData', function(result) {
+    const storedData = result.myData;
+    console.log('Retrieved data:', storedData);
+  });
+  
+*/
+
         let db = new sqlite3.Database('domains.db', (err) => {
             if (err) {
                 console.error(err.message);

@@ -1,5 +1,6 @@
 import sqlite3 from 'sqlite3';
 import {isDomainValid} from './virusTotal.js';
+import {openMessage} from './message.js';
 
 function isSuspicious(domain1, domain2) {
     if (domain1 === domain2) {
@@ -27,12 +28,16 @@ export function findSuspicious(newDomain) {
                 if (isSuspicious(domainName, newDomain)) {
                     db.close();
                     console.log("suspicious");
+                    openMessage();
+                    //TODO:check an opthion to return something after click
                     return;
                 }
             }
             db.close();
             if (isDomainValid(newDomain)==false) {
-                console.log("suspicious2")
+                console.log("suspicious2");
+                openMessage();
+                //TODO:check an opthion to return something after click
                 return;
             }
         });
