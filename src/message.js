@@ -1,4 +1,4 @@
-import {insertToDatabase} from './domainsDatabase';
+import {insertToDomainDatabase} from './domainsDatabase';
 import {insertToBlockDatabase} from './blockDatabase';
 import {deleteEmails} from './checkEmail.html';
 //get the message
@@ -23,7 +23,7 @@ function closeMessage() {
 // Function to handle "Yes" button click
 function handleYes() { // add to domainDatabase
     alert("You clicked Yes!");
-    insertToDatabase(senderDomain);
+    insertToDomainDatabase(senderDomain);
     closeMessage();
 }
 

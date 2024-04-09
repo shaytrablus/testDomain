@@ -1,48 +1,43 @@
-import sqlite3 from 'sqlite3';
-
-// Create a function to initialize the database
-export class BlockDomainsDatabase {
+class BlockDomainsDatabase {
     constructor() {
-        let db = new sqlite3.Database('blockDomains.db', (err) => {
-            if (err) {
-                console.error(err.message);
-            } else {
-                console.log('Connected to the blockDomains database.');
-                // Create the blockDomains table if it doesn't exist
-                db.run(`CREATE TABLE IF NOT EXISTS blockDomains (
-                    domainName TEXT PRIMARY KEY
-                )`, (err) => {
-                    if (err) {
-                        console.error('Error creating table:', err.message);
-                    } else {
-                        console.log('Table created successfully.');
-                    }
-                });
-            }
-        });
+        // Initialize the blockDomains if it doesn't exist
+        if (!localStorage.getItem('blockDomains')) {
+            localStorage.setItem('blockDomains', JSON.stringify([]));
+            let blockDomains = JSON.parse(localStorage.getItem('blockDomains'));
+            blockDomains.push('virustotal.com');
+            localStorage.setItem('blockDomains', JSON.stringify(blockDomains));
+            console.log('BlockDomains database created successfully.');
+        } else {
+            console.log('Connected to the blockDomains database.');
+        }
     }
 
     insertToBlockDatabase(newDomain) {
-        this.db.run('INSERT INTO blockDomains(domainName) VALUES(?)', [newDomain], function(err) {
-            if (err) {
-                console.error('Error inserting domain:', err.message);
-            } else {
-                console.log('Domain inserted successfully.');
-            }
-        });
+        // Parse the existing blockDomains
+        let blockDomains = JSON.parse(localStorage.getItem('blockDomains'));
+
+        // Check if the domain already exists
+        if (!blockDomains.includes(newDomain)) {
+            // Insert the new domain
+            blockDomains.push(newDomain);
+            localStorage.setItem('blockDomains', JSON.stringify(blockDomains));
+            console.log('Domain inserted successfully.');
+        } else {
+            console.error('Error inserting domain: Domain already exists.');
+        }
     }
 
     domainInBlock(newDomain) {
-        this.db.get('SELECT * FROM blockDomains WHERE domainName = ?', [newDomain], (err, row) => {
-            if (err) {
-                console.error('Error checking domain:', err.message);
-            } else {
-                if (row) {
-                    console.log('Domain exists in the block list.');
-                } else {
-                    console.log('Domain does not exist in the block list.');
-                }
-            }
-        });
+        // Parse the existing blockDomains
+        let blockDomains = JSON.parse(localStorage.getItem('blockDomains'));
+
+        // Check if the domain exists
+        if (blockDomains.includes(newDomain)) {
+            console.log('Domain exists in the block list.');
+            return true;
+        } else {
+            console.log('Domain does not exist in the block list.');
+            return false;
+        }
     }
 }
