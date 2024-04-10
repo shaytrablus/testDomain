@@ -1,5 +1,5 @@
 import { isDomainValid } from './virusTotal.js';
-import { openMessage } from './message.js';
+import { openMessage } from '../to_delete/message.js';
 
 function isSuspicious(domain1, domain2) {
     if (domain1 === domain2) {

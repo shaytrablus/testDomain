@@ -1,6 +1,6 @@
-import {insertToDomainDatabase} from './domainsDatabase';
-import {insertToBlockDatabase} from './blockDatabase';
-import {deleteEmails} from './checkEmail.html';
+import {insertToDomainDatabase} from '../src/domainsDatabase';
+import {insertToBlockDatabase} from '../src/blockDatabase';
+//import {deleteEmails} from './checkEmail.html';
 //get the message
 var message = document.getElementById("myMessage");
 
@@ -11,26 +11,26 @@ var btn = document.querySelector("button");
 var span = document.getElementsByClassName("close")[0];
 
 // Function to open the message
-export function openMessage() {
+window.openMessage = function() {
     message.style.display = "block";
 }
 
 // Function to close the message
-function closeMessage() {
+window.closeMessage = function() {
     message.style.display = "none";
 }
 
 // Function to handle "Yes" button click
-function handleYes() { // add to domainDatabase
+export function handleYes() { // add to domainDatabase
     alert("You clicked Yes!");
     insertToDomainDatabase(senderDomain);
     closeMessage();
 }
 
 // Function to handle "No" button click
-function handleNo() { //add to blockDatabase and delete messages
+export function handleNo() { //add to blockDatabase and delete messages
     alert("You clicked No!");
-    deleteEmails(gmail, senderDomain);
+    //deleteEmails(gmail, senderDomain);
     insertToBlockDatabase(senderDomain);
     closeMessage();
 }

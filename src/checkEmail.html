@@ -16,18 +16,22 @@
 
   <pre id="content" style="white-space: pre-wrap;"></pre>
 
-  <script src="checkSuspicious.js"></script>
   <script src="auth.js"></script>
   <script src="blockDatabase.js"></script>
   <script src="domainsDatabase.js"></script>
   <script type="text/javascript">
 
+    const openMessage = (senderDomain) => {
+      return confirm('Do you trust this domain: '+senderDomain+' ?');
+    }
+
+    const domain_db = new DomainsDatabase();
+    const block_domain_db = new BlockDomainsDatabase();
+
     async function checkEmail(auth) {
       gapi.client.load('gmail', 'v1', () => {
         const request = gapi.client.gmail.users.messages.list({ userId: 'me', q: 'is:unread', });
         request.execute(response => {
-          domain_db = new DomainsDatabase();
-          block_domain_db = new BlockDomainsDatabase();
           if (response.messages && response.messages.length > 0) {
             response.messages.forEach(message => {
               const messageRequest = gapi.client.gmail.users.messages.get({ userId: 'me', id: message.id, });
@@ -44,17 +48,9 @@
                   const senderDomain = senderEmail.split('@')[1].split('>')[0];
                   console.log("sender domain:", senderDomain);
                   if (block_domain_db.domainInBlock(senderDomain)) {
-                    openMessage();
-                    //deleteEmails(auth, senderDomain);
-                    //console.log(`delete ${senderDomain}`)
+                    alert('Suspicious email detected: '+senderDomain+'!');
                   } else {
-                    const ans = findSuspicious(senderDomain);
-                    if (ans === 1) {
-                      insertToDatabase(senderDomain);
-                    } else if (ans === 2) {
-                      //deleteEmails(auth, senderDomain);
-                      insertToBlockDatabase(senderDomain);
-                    }
+                      findSuspicious(senderDomain);
                   }
                 }
                 else {
@@ -70,33 +66,12 @@
       })
     }
 
-    /*function deleteEmails(auth, domain) {
-      console.log("DEL");
-      gapi.client.gmail.users.messages.list({
-        userId: 'me',
-        q: `from:${domain}`,
-      }, (err, res) => {
-        if (err) return console.error('The API returned an error:', err);
-        const messages = res.data.messages;
-        console.log(messages.length);
-        if (messages && messages.length > 0) {
-          console.log(`Deleting ${messages.length} emails from ${domain} domain.`);
-          messages.forEach((message) => {
-            gmail.users.messages.delete({
-              userId: 'me',
-              id: message.id,
-            }, (err, res) => {
-              if (err) return console.error('The API returned an error:', err);
-            });
-          });
-        }
-      });
-    }*/
-
     function isSuspicious(domain1, domain2) {
       if (domain1 === domain2) {
         return false;
       }
+      //console.log(domain1);
+      //console.log(domain2);
       if (levenshteinDistance(domain1, domain2) < 3) {
         return true;
       }
@@ -104,18 +79,27 @@
     }
 
     function findSuspicious(newDomain) {
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        const value = localStorage.getItem(key);
-        if (isSuspicious(value, newDomain)){
-            openMessage();
-            return;
+      let domains = JSON.parse(localStorage.getItem('domains'));
+      if (domains) {
+        for (let i = 0; i < domains.length; i++) {
+          if (isSuspicious(domains[i], newDomain)){
+            handleMessage(newDomain);
+          }
+          else if (isDomainValid(newDomain) == false) {
+            handleMessage(newDomain);
+          }
         }
-        if (isDomainValid(newDomain) == false) {
-            openMessage();
-            return;
-        }
-      }     
+      }
+    }
+
+    function handleMessage(newDomain){
+      let trustUser = openMessage(newDomain);
+      if (trustUser){
+        domain_db.insertToDomainDatabase(newDomain);
+      }
+      else{
+        block_domain_db.insertToBlockDatabase(newDomain);
+      }
     }
 
     const levenshteinDistance = (s, t) => {

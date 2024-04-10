@@ -4,8 +4,8 @@ class BlockDomainsDatabase {
         if (!localStorage.getItem('blockDomains')) {
             localStorage.setItem('blockDomains', JSON.stringify([]));
             let blockDomains = JSON.parse(localStorage.getItem('blockDomains'));
-            blockDomains.push('virustotal.com');
-            localStorage.setItem('blockDomains', JSON.stringify(blockDomains));
+            //blockDomains.push('virustotal.com');
+            //localStorage.setItem('blockDomains', JSON.stringify(blockDomains));
             console.log('BlockDomains database created successfully.');
         } else {
             console.log('Connected to the blockDomains database.');

@@ -16,6 +16,7 @@ class DomainsDatabase {
             domains.push('apple.com');
             domains.push('microsoft.com');
             domains.push('youtube.com');
+            domains.push('virostotal.com');
             localStorage.setItem('domains', JSON.stringify(domains));
             console.log(domains);
             console.log('domains database created successfully.');
