@@ -2,12 +2,12 @@
 <html>
 
 <head>
-  <title>Gmail API Quickstart</title>
+  <title>Check email domain</title>
   <meta charset="utf-8" />
 </head>
 
 <body>
-  <p>Gmail API Quickstart</p>
+  <p>Check email domain</p>
 
   <!--Add buttons to initiate auth sequence and sign out-->
   <button id="authorize_button" onclick="handleAuthClick()">Authorize</button>
@@ -66,28 +66,22 @@
       })
     }
 
-    function isSuspicious(domain1, domain2) {
-      if (domain1 === domain2) {
-        return false;
-      }
-      //console.log(domain1);
-      //console.log(domain2);
-      if (levenshteinDistance(domain1, domain2) < 3) {
-        return true;
-      }
-      return false;
-    }
-
-    function findSuspicious(newDomain) {
+    async function findSuspicious(newDomain) {
+      let flag = false;
       let domains = JSON.parse(localStorage.getItem('domains'));
       if (domains) {
-        for (let i = 0; i < domains.length; i++) {
-          if (isSuspicious(domains[i], newDomain)){
-            handleMessage(newDomain);
+        if (!domains.includes(newDomain)) {
+          for (let i = 0; i < domains.length; i++) {
+            if (levenshteinDistance(domains[i], newDomain) < 3){
+              handleMessage(newDomain);
+              flag = true;
+              break;
+            }
           }
-          else if (isDomainValid(newDomain) == false) {
-            handleMessage(newDomain);
-          }
+          if (flag === false && await isDomainValid(newDomain) === false){
+              console.log('check in virustotal '+newDomain);
+              handleMessage(newDomain);
+          } 
         }
       }
     }
@@ -123,8 +117,8 @@
     };
 
     async function isDomainValid(domain) {
-        const apiKey = '272264df46cbfc7b845b59154f41ae0cfccbf25fddd29c6fb57042267c7bb7dd';
-        const url = `https://www.virustotal.com/api/v3/domains/${domain}`;
+      const apiKey = '272264df46cbfc7b845b59154f41ae0cfccbf25fddd29c6fb57042267c7bb7dd';
+        const url = `https://www.virustotal.com/api/v3/domains/`+ domain;
         const headers = {
             'x-apikey': apiKey
         };
@@ -132,6 +126,7 @@
         try {
             const response = await fetch(url, { headers });
             if (response.ok) {
+              console.log(domain);
                 const data = await response.json();
                 if ('error' in data) {
                     console.log("Error:", data.error.message);
@@ -153,10 +148,6 @@
             return null;
         }
     }
-
-    
-
-
   </script>
   <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
 </body>

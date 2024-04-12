@@ -6,7 +6,6 @@ class DomainsDatabase {
             let domains = JSON.parse(localStorage.getItem('domains'));
             domains.push('gmail.com');
             domains.push('google.com');
-            domains.push('facebook.com');
             domains.push('outlook.com');
             domains.push('linkedin.com');
             domains.push('twitter.com');
@@ -17,6 +16,7 @@ class DomainsDatabase {
             domains.push('microsoft.com');
             domains.push('youtube.com');
             domains.push('virostotal.com');
+            domains.push('wala.co.il');
             localStorage.setItem('domains', JSON.stringify(domains));
             console.log(domains);
             console.log('domains database created successfully.');
@@ -28,7 +28,10 @@ class DomainsDatabase {
     insertToDomainDatabase(newDomain) {
         // Parse the existing domains
         let domains = JSON.parse(localStorage.getItem('domains'));
-
+        if (domains===null){
+            localStorage.setItem('domains', JSON.stringify([]));
+            domains = JSON.parse(localStorage.getItem('domains'));
+        }
         // Check if the domain already exists
         if (!domains.includes(newDomain)) {
             // Insert the new domain

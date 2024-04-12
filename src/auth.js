@@ -12,9 +12,6 @@ let tokenClient;
 let gapiInited = false;
 let gisInited = false;
 
-// document.getElementById('authorize_button').style.visibility = 'hidden';
-// document.getElementById('signout_button').style.visibility = 'hidden';
-
 /**
  * Callback after api.js is loaded.
  */
@@ -77,7 +74,7 @@ function handleAuthClick() {
  /**
      *  Sign out the user upon button click.
      */
- function handleSignoutClick() {
+function handleSignoutClick() {
     const auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
         console.log('User signed out.');
